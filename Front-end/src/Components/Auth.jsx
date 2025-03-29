@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setName, clearName } from '../redux/nameSlice';
-import { setEmail, clearEmail } from '../redux/emailSlice';
+import { setEmail } from '../Redux/Data/emailSlice';
+import { setName } from '../Redux/Data/nameSlice';
 import Navbar from './Navbar';
 
 const Auth = () => {
