@@ -112,7 +112,10 @@ const Auth = () => {
         try {
           const response = await axios.post(
             `${BASE_URL}/api/v1/auth/register`,
-            { name, email, password }
+            { name, email, password },
+            {
+              withCredentials: true,
+            }
           );
           toast.success(response.data.message);
           console.log(response.data);
@@ -131,10 +134,10 @@ const Auth = () => {
       setLoading(false);
   };
 
-  // const handleSocialAuth = (provider) => {
-  //   console.log(`Authenticating with ${provider}`);
-  //   // Implement social auth logic
-  // };
+  const handleSocialAuth = (provider) => {
+    console.log(`Authenticating with ${provider}`);
+    // Implement social auth logic
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -162,7 +165,7 @@ const Auth = () => {
               </div>
               
               {/* Social Login Buttons */}
-              {/* <div className="flex flex-col space-y-3 mb-6">
+              <div className="flex flex-col space-y-3 mb-6">
                 <button 
                   onClick={() => handleSocialAuth('Google')}
                   className="flex items-center justify-center gap-3 w-full py-2.5 border border-gray-600 rounded-lg hover:bg-gray-700/50 transition duration-300"
@@ -184,14 +187,14 @@ const Auth = () => {
                   </svg>
                   Continue with GitHub
                 </button>
-              </div> */}
+              </div>
               
               {/* Divider */}
-              {/* <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6">
                 <div className="flex-1 h-px bg-gray-700"></div>
                 <p className="mx-4 text-sm text-gray-400">or continue with email</p>
                 <div className="flex-1 h-px bg-gray-700"></div>
-              </div> */}
+              </div>
               
               {/* Form */}
               <form onSubmit={handleSubmit}>
