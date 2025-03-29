@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setEmail } from '../Redux/Data/emailSlice';
 import { setName } from '../Redux/Data/nameSlice';
+import { setId } from '../Redux/Data/idSlice';
 import Navbar from './Navbar';
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 
 const Auth = () => {
+
+  var BASE_URL = import.meta.env.VITE_BACKEND_HOST;
+
   const dispatch = useDispatch();
   const storedName = useSelector((state) => state.name);
   const storedEmail = useSelector((state) => state.email);
@@ -33,6 +41,8 @@ const Auth = () => {
       setLocalEmail(storedEmail);
     }
   }, [storedName, storedEmail]);
+
+  const navigate = useNavigate();
 
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
@@ -66,42 +76,59 @@ const Auth = () => {
   const handleNameChange = (e) => {
     const newName = e.target.value;
     setLocalName(newName);
-    dispatch(setName(newName));
   };
 
   const handleEmailChange = (e) => {
     const newEmail = e.target.value;
     setLocalEmail(newEmail);
-    dispatch(setEmail(newEmail));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
       if (isLogin) {
-        console.log('Logging in with:', { email, password, rememberMe });
-        // Mock validation
-        if (email === 'test@example.com' && password === 'password') {
-          // Success
-        } else {
-          setError('Invalid email or password');
+        try {
+          const response = await axios.post(
+            `${BASE_URL}/api/v1/auth/login`,
+            { email, password },
+            {
+              withCredentials: true,
+            }
+          );
+          toast.success(response.data.message);
+          console.log(response.data)
+          // const id = response.data.user.id; // extract the id from the response
+          dispatch(setId(response.data.user.id));
+          dispatch(setEmail(response.data.user.email));
+          dispatch(setName(response.data.user.name));
+          navigate("/"); // Redirect to home page upon successful login
+        } catch (error) {
+          toast.error(error.response?.data?.message || "Something went wrong.");
+        } finally {
+          setLoading(false); // Stop loader
         }
       } else {
-        console.log('Signing up with:', { name, email, password });
-        // Update Redux store with final values
-        dispatch(setName(name));
-        dispatch(setEmail(email));
+        try {
+          const response = await axios.post(
+            `${BASE_URL}/api/v1/auth/register`,
+            { name, email, password }
+          );
+          toast.success(response.data.message);
+          console.log(response.data);
         
-        // Mock validation
-        if (passwordStrength < 2) {
-          setError('Please choose a stronger password');
-        }
+        dispatch(setId(response.data.user.id));
+        dispatch(setEmail(response.data.user.email));
+        dispatch(setName(response.data.user.name));
+      }
+      catch (error) {
+        toast.error(error.response?.data?.message || "Something went wrong.");
+        console.log(error);
+      } finally {
+        setLoading(false); // Stop loader
+      }
       }
       setLoading(false);
-    }, 1500);
   };
 
   // const handleSocialAuth = (provider) => {
