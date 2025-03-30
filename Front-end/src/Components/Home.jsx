@@ -1,45 +1,46 @@
 import React from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
   // Hard-coded templates data
   const templates = [
     {
       id: 1,
-      title: "Minimal Portfolio",
-      description: "Clean and modern design perfect for creatives who want to showcase their work elegantly.",
-      image_url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
-    },
+      title: "Student Developer Portfolio",
+      description: "A modern, text-only portfolio designed for student developers. This template showcases a dynamic hero section, an about section, project highlights, skill badges, and a contact form, all with a toggleable light/dark theme and smooth animations",
+      image_url: "./src/assets/s_deve.jpg" 
+    },    
     {
       id: 2,
-      title: "Developer Showcase",
-      description: "Highlight your coding projects and skills with this tech-focused portfolio design.",
-      image_url: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=800&auto=format&fit=crop"
+      title: "Student Designer Portfolio",
+      description: "A bold, magazine-style portfolio template designed for student designers. Featuring a fixed vertical sidebar, animated header text, a masonry grid for projects, typewriter-effect about section, and dynamic skill badges, this template highlights creativity and modern design aesthetics",
+      image_url: "./src/assets/s_des.jpg"
     },
     {
       id: 3,
-      title: "Creative Studio",
-      description: "Bold and vibrant layout designed for artists, designers, and creative professionals.",
-      image_url: "https://images.unsplash.com/photo-1545239351-ef35f43d514b?q=80&w=800&auto=format&fit=crop"
+      title: "Content Writer Portfolio",
+      description: "A horizontal-scrolling portfolio with four distinct panels for About, Writings, Editorials, and Contact. Emphasizes text-based content and a unique side-to-side navigation experience.",
+      image_url: "./src/assets/c_w.jpg"
     },
     {
       id: 4,
-      title: "Photographer's Gallery",
-      description: "Immersive portfolio that puts your photography front and center with fullscreen capabilities.",
-      image_url: "https://images.unsplash.com/photo-1554080353-a576cf803bda?q=80&w=800&auto=format&fit=crop"
+      title: "Marketing Fresher Portfolio",
+      description: "A diagonal-split portfolio with a fixed right-side navigation. Features bold gradients, angled sections, animated headings, and an energetic layout to reflect a fresh marketing perspective.",
+      image_url: "./src/assets/m.jpg"
     },
     {
       id: 5,
-      title: "Corporate Professional",
-      description: "Refined and polished presentation for business professionals and consultants.",
-      image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop"
+      title: "Experienced SDE Portfolio",
+      description: "A split-screen layout with a left intro panel and a right vertical menu. Below, a content area displays about, experience timeline, projects, skills, and a contact form with modern animations",
+      image_url: "./src/assets/sde.jpg"
     },
     {
       id: 6,
-      title: "Interactive Resume",
-      description: "Turn your resume into an engaging interactive experience that employers will remember.",
-      image_url: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop"
+      title: "Entrepreneur Startup Founder Portfolio",
+      description: "A Z-shaped (zigzag) layout with alternating colored panels, focusing on about, ventures, a vision CTA, and a minimal contact form. Ideal for showcasing entrepreneurial spirit and leadership.",
+      image_url: "./src/assets/startup.jpg"
     }
   ];
 
@@ -169,19 +170,21 @@ const Home = () => {
                   <img 
                     src={template.image_url} 
                     alt={template.title}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    className="w-full h-full object-center transition-transform duration-500 hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-white mb-2">{template.title}</h3>
                   <p className="text-gray-400 text-sm">{template.description}</p>
+                  <Link to={`/template/${template.id}`}>
                   <button className="mt-4 text-purple-400 hover:text-purple-300 text-sm font-medium flex items-center transition-colors duration-300">
                     View Template
                     <svg className="w-4 h-4 ml-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
+                  </Link>
                 </div>
               </div>
             ))}
