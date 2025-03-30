@@ -15,6 +15,7 @@ import Auth from './Components/Auth'
 import { ProtectedRoute, AuthRoute } from './Components/ProtectedRoute'
 import Dashboard from './Components/Dashboard'
 import Profile from './Components/Profile'
+import TemplateDetail from './Components/TemplateDetail'
 
 function App() {
   // Get user ID from Redux store to check authentication status
@@ -73,6 +74,10 @@ function App() {
     {
       path: "/profile",
       element: <ProtectedRoute><Profile /></ProtectedRoute>
+    },
+    {
+      path: "/template/:id",
+      element: <TemplateDetail />,
     }
   ]);
 
