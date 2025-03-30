@@ -152,7 +152,7 @@ const Home = () => {
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-indigo-500 bg-clip-text text-transparent inline-block">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-400 to-indigo-500 bg-clip-text text-transparent inline-block">
               Stunning Templates
             </h2>
             <p className="mt-4 text-gray-400 max-w-xl mx-auto text-lg">
@@ -220,7 +220,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+      Stunning
       {/* Footer */}
       <Footer />
     </div>

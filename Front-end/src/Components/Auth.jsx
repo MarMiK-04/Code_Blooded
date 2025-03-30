@@ -9,10 +9,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from 'lucide-react'; // Import eye icons
 
-
-
-
-
 const Auth = () => {
   var BASE_URL = import.meta.env.VITE_BACKEND_HOST;
 
@@ -92,6 +88,10 @@ const Auth = () => {
     setLocalEmail(newEmail);
   };
 
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -100,15 +100,23 @@ const Auth = () => {
       try {
         const response = await axios.post(
           `${BASE_URL}/api/v1/auth/login`,
-          { email, password });
+          { email, password }
+        );
+        
         toast.success(response.data.message);
         console.log(response.data);
-        // const id = response.data.user.id; // extract the id from the response
+        
         dispatch(setId(response.data.user.id));
         dispatch(setEmail(response.data.user.email));
         dispatch(setName(response.data.user.name));
-        // Save the token in local storage or a cookie
-        localStorage.setItem("token", response.data.token);
+        
+        // Save the token based on remember me preference
+        // if (rememberMe) {
+        //   localStorage.setItem("token", response.data.token);
+        // } else {
+        //   sessionStorage.setItem("token", response.data.token);
+        // }
+        
         navigate("/"); // Redirect to home page upon successful login
       } catch (error) {
         toast.error(error.response?.data?.message || "Something went wrong.");
@@ -116,6 +124,13 @@ const Auth = () => {
         setLoading(false); // Stop loader
       }
     } else {
+      // Validate password length
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters long");
+        setLoading(false);
+        return;
+      }
+      
       try {
         const response = await axios.post(
           `${BASE_URL}/api/v1/auth/register`,
@@ -127,8 +142,10 @@ const Auth = () => {
         dispatch(setId(response.data.user.id));
         dispatch(setEmail(response.data.user.email));
         dispatch(setName(response.data.user.name));
-        // Save the token in local storage or a cookie
+        
+        // Save the token in local storage
         localStorage.setItem("token", response.data.token);
+        navigate("/"); // Redirect to home page after successful signup
       } catch (error) {
         toast.error(error.response?.data?.message || "Something went wrong.");
         console.log(error);
@@ -136,13 +153,29 @@ const Auth = () => {
         setLoading(false); // Stop loader
       }
     }
-    setLoading(false);
   };
 
-  const handleSocialAuth = (provider) => {
-    console.log(`Authenticating with ${provider}`);
-    // Implement social auth logic
-  };
+  const handleSocialAuth = async (provider) => {
+      console.log(`Authenticating with ${provider}`);
+  }
+
+  // const handleSocialAuth = async (provider) => {
+  //   try {
+  //     setLoading(true);
+      
+  //     if (provider === "Google") {
+  //       // Redirect to Google OAuth endpoint
+  //       window.location.href = `${BASE_URL}/api/v1/auth/google`;
+  //     } else if (provider === "GitHub") {
+  //       // Redirect to GitHub OAuth endpoint
+  //       window.location.href = `${BASE_URL}/api/v1/auth/github`;
+  //     }
+  //   } catch (error) {
+  //     toast.error(`Failed to authenticate with ${provider}`);
+  //     console.error(error);
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -172,6 +205,7 @@ const Auth = () => {
               {/* Social Login Buttons */}
               <div className="flex flex-col space-y-3 mb-6">
                 <button
+                  type="button"
                   onClick={() => handleSocialAuth("Google")}
                   className="flex items-center justify-center gap-3 w-full py-2.5 border border-gray-600 rounded-lg hover:bg-gray-700/50 transition duration-300"
                 >
@@ -201,6 +235,7 @@ const Auth = () => {
                   Continue with Google
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleSocialAuth("GitHub")}
                   className="flex items-center justify-center gap-3 w-full py-2.5 border border-gray-600 rounded-lg hover:bg-gray-700/50 transition duration-300"
                 >
@@ -304,7 +339,7 @@ const Auth = () => {
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
-                  {/* Password RequiSignup only) */}
+                  {/* Password Requirements (Signup only) */}
                   {!isLogin && password.length > 0 && (
                     <div className="mt-2 text-xs space-y-1 text-gray-400">
                       <p
@@ -356,6 +391,7 @@ const Auth = () => {
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
+                        // onChange={handleRememberMeChange}
                         className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-700"
                       />
                       <label
@@ -379,9 +415,9 @@ const Auth = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || (!isLogin && password.length < 8)}
                   className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
-                    loading
+                    loading || (!isLogin && password.length < 8)
                       ? "bg-purple-700/50 cursor-not-allowed"
                       : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-purple-500/25"
                   }`}

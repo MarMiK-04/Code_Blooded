@@ -13,7 +13,7 @@ const Footer = () => {
       </div>
       
       <div className="container mx-auto px-6 pt-16 pb-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-9 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-7 mb-16">
           {/* Brand Column */}
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="text-xl font-bold bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent">
