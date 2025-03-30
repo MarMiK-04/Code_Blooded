@@ -6,27 +6,29 @@ import Footer from "./Footer";
 const TemplateDetail = () => {
   const { id } = useParams();
   const [template, setTemplate] = useState(null);
-
-  const templates = [
-    {
-      id: 1,
-      title: "Student Developer Portfolio",
-      description: "A modern, text-only portfolio designed for student developers...",
-      image_url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop",
-    },
-    {
-      id: 2,
-      title: "Developer Showcase",
-      description: "Highlight your coding projects and skills...",
-      image_url: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=800&auto=format&fit=crop",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const selectedTemplate = templates.find((t) => t.id === parseInt(id));
-    setTemplate(selectedTemplate);
+    const fetchTemplate = async () => {
+      try {
+        const response = await fetch(`/api/v1/portfolio/templates/${id}`);
+        if (!response.ok) {
+          throw new Error("Template not found");
+        }
+        const data = await response.json();
+        setTemplate(data);
+      } catch (error) {
+        console.error("Error fetching template:", error);
+        setTemplate(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplate();
   }, [id]);
 
+  if (loading) return <div className="text-white text-center mt-20">Loading...</div>;
   if (!template) return <div className="text-white text-center mt-20">Template not found</div>;
 
   return (
